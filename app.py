@@ -902,6 +902,25 @@ def import_excel():
     return render_template('import.html')
 
 
+# ── One-time setup (remove after first use) ───────────────────────────────────
+
+@app.route('/setup/init-admin')
+def setup_init_admin():
+    token = request.args.get('t', '')
+    if token != 'rci350-setup-2026':
+        return 'Forbidden', 403
+    existing = query('SELECT id FROM users WHERE email=%s', ('bleblanc@rcigroup.us',), one=True)
+    if existing:
+        return 'Admin user already exists.', 200
+    query(
+        'INSERT INTO users (name, email, password_hash, role) VALUES (%s,%s,%s,%s)',
+        ('Brant LeBlanc', 'bleblanc@rcigroup.us',
+         generate_password_hash('MavAdmin2026!'), 'admin'),
+        commit=True
+    )
+    return 'Admin user created. Login: bleblanc@rcigroup.us / MavAdmin2026!', 200
+
+
 # ── Visitors checkout ─────────────────────────────────────────────────────────
 
 @app.route('/visitors/<int:vid>/checkout', methods=['POST'])

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if wps else 'New' }} WPS — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ 'Edit' if wps else 'New' }} WPS</h1>
+  <div class="actions"><a href="/admin/wps" class="btn btn-outline">Cancel</a></div>
+</div>
+<div class="card" style="max-width:700px">
+  <form method="post">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="wps_number">WPS Number *</label>
+        <input id="wps_number" name="wps_number" type="text" value="{{ wps.wps_number if wps else '' }}" required/>
+      </div>
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" name="type">
+          {% for t in ('WQ','WPQ','PQ','Other') %}
+          <option value="{{ t }}" {% if wps and wps.type==t %}selected{% endif %}>{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="name">Description / Name</label>
+      <input id="name" name="name" type="text" value="{{ wps.name if wps else '' }}"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="process">Process</label>
+        <input id="process" name="process" type="text" value="{{ wps.process if wps else '' }}" placeholder="SMAW, GTAW, GMAW..."/>
+      </div>
+      <div class="form-group">
+        <label for="position">Position</label>
+        <input id="position" name="position" type="text" value="{{ wps.position if wps else '' }}" placeholder="1G, 2G, 6G..."/>
+      </div>
+      <div class="form-group">
+        <label for="pipe_plate">Pipe / Plate</label>
+        <select id="pipe_plate" name="pipe_plate">
+          <option value="">—</option>
+          {% for v in ('Pipe','Plate','Pipe & Plate') %}
+          <option {% if wps and wps.pipe_plate==v %}selected{% endif %}>{{ v }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="size">Size</label>
+        <input id="size" name="size" type="text" value="{{ wps.size if wps else '' }}" placeholder='e.g. 2" SCH40'/>
+      </div>
+      <div class="form-group">
+        <label for="thickness">Thickness</label>
+        <input id="thickness" name="thickness" type="text" value="{{ wps.thickness if wps else '' }}"/>
+      </div>
+      <div class="form-group">
+        <label for="filler_metal">Filler Metal</label>
+        <input id="filler_metal" name="filler_metal" type="text" value="{{ wps.filler_metal if wps else '' }}"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input id="price" name="price" type="number" step="0.01" value="{{ wps.price if wps else '' }}"/>
+      </div>
+      <div class="form-group">
+        <label for="cost_code">Cost Code</label>
+        <input id="cost_code" name="cost_code" type="text" value="{{ wps.cost_code if wps else '' }}"/>
+      </div>
+      <div class="form-group">
+        <label for="client_id">Client (if restricted)</label>
+        <select id="client_id" name="client_id">
+          <option value="">All clients</option>
+          {% for c in clients %}
+          <option value="{{ c.id }}" {% if wps and wps.client_id==c.id %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">{{ 'Save Changes' if wps else 'Add WPS' }}</button>
+  </form>
+</div>
+{% endblock %}

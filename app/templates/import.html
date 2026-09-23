@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Import Excel — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Import from Excel</h1>
+</div>
+
+<div class="card" style="max-width:600px">
+  <p style="margin-bottom:20px;color:#555;font-size:.9rem;line-height:1.6">
+    Upload one or more <strong>WQ Welder Test</strong> Excel files. Each file creates one test session.
+    The import engine reads the welder name, Picture ID (S.S.#), Lab#, Contractor, and WPS assignments from the spreadsheet.
+  </p>
+  <form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="files">Select Excel file(s)</label>
+      <input id="files" name="files" type="file" accept=".xlsx,.xls" multiple
+             style="padding:10px;background:#f7f8fa;border:2px dashed #d1d5db;cursor:pointer"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Import</button>
+  </form>
+</div>
+{% endblock %}

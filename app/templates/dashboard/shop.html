@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Shop Dashboard — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Shop Dashboard</h1>
+  <div class="actions">
+    <a href="/sessions/new" class="btn btn-primary">+ New Session</a>
+    <a href="/import" class="btn btn-secondary">Import Excel</a>
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;margin-bottom:20px">
+  <a href="?tab=checked_in"  class="btn {% if tab=='checked_in'  %}btn-primary{% else %}btn-outline{% endif %} btn-sm">Checked In</a>
+  <a href="?tab=checked_out" class="btn {% if tab=='checked_out' %}btn-primary{% else %}btn-outline{% endif %} btn-sm">Today's Completed</a>
+  <a href="?tab=all"         class="btn {% if tab=='all'         %}btn-primary{% else %}btn-outline{% endif %} btn-sm">All</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Lab #</th>
+          <th>Welder</th>
+          <th>Picture ID</th>
+          <th>Client</th>
+          <th>Check-In</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td><strong>{{ r.lab_number or r.session_number }}</strong></td>
+          <td>{{ r.first_name }} {{ r.last_name }}</td>
+          <td>{{ r.picture_id or '—' }}</td>
+          <td>{{ r.client_name or '—' }}</td>
+          <td>{{ r.check_in_datetime.strftime('%m/%d %I:%M %p') if r.check_in_datetime else '—' }}</td>
+          <td>
+            {% if r.status == 'checked_in' %}<span class="badge badge-blue">Checked In</span>
+            {% elif r.status == 'testing' %}<span class="badge badge-yellow">Testing</span>
+            {% elif r.status == 'completed' %}<span class="badge badge-green">Completed</span>
+            {% else %}<span class="badge badge-gray">{{ r.status|title }}</span>{% endif %}
+          </td>
+          <td>
+            <form method="post" action="/sessions/{{ r.id }}/status" style="display:inline">
+              {% if r.status == 'checked_in' %}
+                <input type="hidden" name="status" value="testing"/>
+                <button class="btn btn-sm btn-secondary" type="submit">Start Testing</button>
+              {% elif r.status == 'testing' %}
+                <input type="hidden" name="status" value="completed"/>
+                <button class="btn btn-sm btn-success" type="submit">Check Out</button>
+              {% endif %}
+            </form>
+            {% if r.status in ('checked_in','testing') %}
+            <form method="post" action="/sessions/{{ r.id }}/status" style="display:inline;margin-left:4px">
+              <input type="hidden" name="status" value="cancelled"/>
+              <button class="btn btn-sm btn-danger" type="submit" onclick="return confirm('Cancel this session?')">Cancel</button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;color:#aaa;padding:32px">No sessions found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

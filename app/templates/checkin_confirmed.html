@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checked In — Maverick</title>
+<meta http-equiv="refresh" content="12;url=/"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .card{background:#fff;border-radius:16px;padding:52px 40px;max-width:440px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.5);text-align:center}
+  .icon{font-size:3.5rem;margin-bottom:16px}
+  h2{font-size:1.5rem;font-weight:800;color:#1a1a2e;margin-bottom:10px}
+  p{color:#777;font-size:.95rem;line-height:1.6}
+  .name{color:#c8102e;font-weight:700}
+  .redirect-note{margin-top:28px;font-size:.8rem;color:#bbb}
+  .btn{display:inline-block;margin-top:20px;padding:11px 28px;background:#c8102e;color:#fff;border-radius:8px;font-weight:700;font-size:.9rem;text-decoration:none}
+  .btn:hover{background:#a50d26;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon">&#10003;</div>
+  <h2>You're checked in!</h2>
+  <p>Welcome, <span class="name">{{ name }}</span>.<br/>
+  {% if kind == 'tester_confirmed' %}
+    Please see the front desk to complete your session setup.
+  {% elif kind == 'trainee_confirmed' %}
+    Please proceed to the observation area.
+  {% else %}
+    Please proceed to the reception area.
+  {% endif %}
+  </p>
+  <a href="/" class="btn">Done</a>
+  <div class="redirect-note">This screen will return to the menu in a few seconds.</div>
+</div>
+</body>
+</html>

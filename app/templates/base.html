@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>{% block title %}Maverick Welder Portal{% endblock %}</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
+  a{color:#c8102e;text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Nav */
+  .topnav{background:#1a1a2e;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .topnav-brand{font-size:1.1rem;font-weight:700;color:#fff;letter-spacing:.04em}
+  .topnav-brand span{color:#c8102e}
+  .topnav-links{display:flex;gap:4px;align-items:center}
+  .topnav-links a{color:#c8c8d8;padding:6px 12px;border-radius:6px;font-size:.85rem;transition:background .15s,color .15s}
+  .topnav-links a:hover,.topnav-links a.active{background:#c8102e;color:#fff;text-decoration:none}
+  .topnav-user{font-size:.82rem;color:#9090b0;margin-left:16px}
+
+  /* Main layout */
+  .container{max-width:1200px;margin:0 auto;padding:24px 20px}
+
+  /* Cards */
+  .card{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:24px;margin-bottom:20px}
+  .card-title{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #f0f2f5}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:6px;font-size:.875rem;font-weight:600;cursor:pointer;border:none;transition:background .15s,transform .1s;text-decoration:none}
+  .btn:hover{transform:translateY(-1px);text-decoration:none}
+  .btn-primary{background:#c8102e;color:#fff}
+  .btn-primary:hover{background:#a50d26}
+  .btn-secondary{background:#1a1a2e;color:#fff}
+  .btn-secondary:hover{background:#2a2a4e}
+  .btn-outline{background:transparent;color:#c8102e;border:2px solid #c8102e}
+  .btn-outline:hover{background:#c8102e;color:#fff}
+  .btn-sm{padding:5px 12px;font-size:.8rem}
+  .btn-danger{background:#dc3545;color:#fff}
+  .btn-danger:hover{background:#b02030}
+  .btn-success{background:#198754;color:#fff}
+  .btn-success:hover{background:#146c43}
+
+  /* Tables */
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:.875rem}
+  th{background:#f7f8fa;padding:10px 14px;text-align:left;font-weight:700;color:#555;border-bottom:2px solid #e5e7eb;white-space:nowrap}
+  td{padding:10px 14px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+  tr:hover td{background:#fdf5f5}
+
+  /* Forms */
+  .form-group{margin-bottom:18px}
+  label{display:block;font-size:.82rem;font-weight:700;color:#444;margin-bottom:5px}
+  input[type=text],input[type=email],input[type=password],input[type=date],input[type=number],select,textarea{
+    width:100%;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:6px;font-size:.875rem;
+    transition:border-color .15s;background:#fff;color:#1a1a2e}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:#c8102e;box-shadow:0 0 0 3px rgba(200,16,46,.1)}
+  .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+
+  /* Flash messages */
+  .flash{padding:12px 18px;border-radius:7px;margin-bottom:18px;font-size:.875rem;font-weight:500}
+  .flash-error{background:#fde8ec;color:#9b1c2e;border-left:4px solid #c8102e}
+  .flash-success{background:#e6f4ea;color:#1a5c2e;border-left:4px solid #198754}
+  .flash-info{background:#e8f0fe;color:#1a3c7e;border-left:4px solid #1a3c7e}
+
+  /* Badges */
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+  .badge-green{background:#d1fae5;color:#065f46}
+  .badge-blue{background:#dbeafe;color:#1e40af}
+  .badge-red{background:#fee2e2;color:#991b1b}
+  .badge-yellow{background:#fef9c3;color:#854d0e}
+  .badge-gray{background:#f3f4f6;color:#4b5563}
+
+  /* Page header */
+  .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+  .page-header h1{font-size:1.4rem;font-weight:700}
+  .page-header .actions{display:flex;gap:8px}
+
+  /* Responsive */
+  @media(max-width:640px){
+    .topnav-links a{padding:5px 7px;font-size:.78rem}
+    .container{padding:14px 12px}
+    .form-row{grid-template-columns:1fr}
+  }
+</style>
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+{% if session.user_id %}
+<nav class="topnav">
+  <a class="topnav-brand" href="/">MAVERICK <span>PORTAL</span></a>
+  <div class="topnav-links">
+    {% if session.user_role in ('admin','staff') %}
+      <a href="/dashboard/shop" {% if request.path.startswith('/dashboard/shop') %}class="active"{% endif %}>Shop</a>
+      <a href="/dashboard/lab" {% if request.path.startswith('/dashboard/lab') %}class="active"{% endif %}>Lab</a>
+      <a href="/sessions/new" {% if request.path.startswith('/sessions/new') %}class="active"{% endif %}>+ Session</a>
+      <a href="/welders" {% if request.path.startswith('/welders') %}class="active"{% endif %}>Welders</a>
+      <a href="/invitations" {% if request.path.startswith('/invitations') %}class="active"{% endif %}>Invitations</a>
+      <a href="/import" {% if request.path.startswith('/import') %}class="active"{% endif %}>Import</a>
+      <a href="/dashboard/admin" {% if request.path.startswith('/dashboard/admin') %}class="active"{% endif %}>Visitors</a>
+    {% endif %}
+    {% if session.user_role == 'admin' %}
+      <a href="/admin/wps" {% if request.path.startswith('/admin') %}class="active"{% endif %}>Admin</a>
+    {% endif %}
+    {% if session.user_role == 'partner' %}
+      <a href="/partner" {% if request.path.startswith('/partner') %}class="active"{% endif %}>My Welders</a>
+    {% endif %}
+  </div>
+  <span class="topnav-user">{{ session.user_name }} &nbsp;<a href="/logout" style="color:#c8102e;font-size:.78rem">Logout</a></span>
+</nav>
+{% endif %}
+
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for msg in messages %}
+        <div class="flash flash-info">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

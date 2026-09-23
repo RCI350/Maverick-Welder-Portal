@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Partner Portal — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>My Welders</h1>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Welder</th>
+          <th>Picture ID</th>
+          <th>Lab #</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in sessions %}
+        <tr>
+          <td>{{ s.first_name }} {{ s.last_name }}</td>
+          <td>{{ s.picture_id or '—' }}</td>
+          <td>{{ s.lab_number or s.session_number or '—' }}</td>
+          <td>{{ s.check_in_datetime.strftime('%m/%d/%Y') if s.check_in_datetime else '—' }}</td>
+          <td>
+            {% if s.status == 'completed' %}<span class="badge badge-green">Completed</span>
+            {% elif s.status == 'testing' %}<span class="badge badge-yellow">In Progress</span>
+            {% elif s.status == 'checked_in' %}<span class="badge badge-blue">Checked In</span>
+            {% elif s.status == 'cancelled' %}<span class="badge badge-red">Cancelled</span>
+            {% else %}<span class="badge badge-gray">{{ s.status|title }}</span>{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#aaa;padding:32px">No welder sessions found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

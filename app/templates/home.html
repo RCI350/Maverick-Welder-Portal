@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Maverick Welding — Check-In</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .kiosk{background:#fff;border-radius:16px;padding:48px 40px;max-width:480px;width:90%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+  .logo-bar{margin-bottom:32px}
+  .logo-bar h1{font-size:1.6rem;font-weight:800;color:#1a1a2e;letter-spacing:.02em}
+  .logo-bar h1 span{color:#c8102e}
+  .logo-bar p{color:#777;margin-top:6px;font-size:.95rem}
+  .tile-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+  .tile{background:#f7f8fa;border:2px solid #e5e7eb;border-radius:12px;padding:28px 16px;cursor:pointer;text-decoration:none;transition:border-color .15s,background .15s,transform .15s;display:block}
+  .tile:hover{border-color:#c8102e;background:#fff5f6;transform:translateY(-2px);text-decoration:none}
+  .tile .icon{font-size:2.2rem;margin-bottom:10px}
+  .tile .label{font-size:.92rem;font-weight:700;color:#1a1a2e}
+  .tile .sub{font-size:.78rem;color:#888;margin-top:4px}
+  .visitor-link{margin-top:4px}
+  .visitor-link a{font-size:.82rem;color:#c8102e}
+  .staff-link{margin-top:24px;padding-top:16px;border-top:1px solid #f0f0f0}
+  .staff-link a{font-size:.82rem;color:#aaa}
+  .staff-link a:hover{color:#c8102e}
+</style>
+</head>
+<body>
+<div class="kiosk">
+  <div class="logo-bar">
+    <h1>MAVERICK <span>WELDING</span></h1>
+    <p>Welder Qualification Portal</p>
+  </div>
+
+  <p style="font-size:.9rem;color:#555;margin-bottom:8px">Welcome! Please select your check-in type:</p>
+
+  <div class="tile-grid">
+    <a href="/checkin/tester" class="tile">
+      <div class="icon">&#128293;</div>
+      <div class="label">Tester / Welder</div>
+      <div class="sub">WQ test appointment</div>
+    </a>
+    <a href="/checkin/trainee" class="tile">
+      <div class="icon">&#127891;</div>
+      <div class="label">Trainee</div>
+      <div class="sub">Observation / training</div>
+    </a>
+  </div>
+
+  <div class="visitor-link">
+    <a href="/checkin/visitor">Visitor / Guest check-in</a>
+  </div>
+
+  <div class="staff-link">
+    <a href="/login">Staff login</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Lab Dashboard — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Lab Dashboard</h1>
+</div>
+
+{% for r in rows %}
+<div class="card" style="margin-bottom:16px">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+    <div>
+      <div style="font-size:1.1rem;font-weight:800;color:#1a1a2e">{{ r.first_name }} {{ r.last_name }}</div>
+      <div style="font-size:.82rem;color:#888;margin-top:2px">
+        Lab # <strong>{{ r.lab_number or r.session_number }}</strong>
+        {% if r.picture_id %} &bull; ID: {{ r.picture_id }}{% endif %}
+        {% if r.client_name %} &bull; {{ r.client_name }}{% endif %}
+        &bull; {{ r.check_in_datetime.strftime('%m/%d/%Y %I:%M %p') if r.check_in_datetime }}
+      </div>
+    </div>
+    <div>
+      {% if r.status == 'checked_in' %}<span class="badge badge-blue">Checked In</span>
+      {% elif r.status == 'testing' %}<span class="badge badge-yellow">Testing</span>
+      {% else %}<span class="badge badge-gray">{{ r.status|title }}</span>{% endif %}
+    </div>
+  </div>
+
+  {% if r.tests and r.tests[0] and r.tests[0].id %}
+  <table style="width:100%;border-collapse:collapse;font-size:.85rem">
+    <thead>
+      <tr>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">WPS</th>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">VT Root</th>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">VT Cap</th>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">Lab Result</th>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">Final</th>
+        <th style="padding:8px 12px;background:#f7f8fa;text-align:left;border-bottom:2px solid #e5e7eb">Record</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for t in r.tests %}
+      {% if t and t.id %}
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">
+          <strong>{{ t.wps_number or '—' }}</strong>
+          {% if t.wps_name %}<br/><span style="font-size:.75rem;color:#888">{{ t.wps_name }}</span>{% endif %}
+        </td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">{{ t.vt_root or '—' }}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">{{ t.vt_cap or '—' }}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">{{ t.lab_result or '—' }}</td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">
+          {% if t.final_result == 'Pass' %}<span class="badge badge-green">Pass</span>
+          {% elif t.final_result == 'Fail' %}<span class="badge badge-red">Fail</span>
+          {% else %}{{ t.final_result or '—' }}{% endif %}
+        </td>
+        <td style="padding:8px 12px;border-bottom:1px solid #f0f0f0">
+          <button onclick="toggleResult('rf-{{ r.id }}-{{ t.id }}')" class="btn btn-sm btn-outline">Record</button>
+          <div id="rf-{{ r.id }}-{{ t.id }}" style="display:none;margin-top:10px">
+            <form method="post" action="/sessions/{{ r.id }}/assignment/{{ t.id }}/result">
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px">
+                <div>
+                  <label style="font-size:.75rem;font-weight:700;color:#444;display:block;margin-bottom:3px">VT Root</label>
+                  <select name="vt_root" style="width:100%;padding:6px;border:1.5px solid #d1d5db;border-radius:5px;font-size:.82rem">
+                    <option value="">—</option>
+                    <option {% if t.vt_root=='Pass' %}selected{% endif %}>Pass</option>
+                    <option {% if t.vt_root=='Fail' %}selected{% endif %}>Fail</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:.75rem;font-weight:700;color:#444;display:block;margin-bottom:3px">VT Cap</label>
+                  <select name="vt_cap" style="width:100%;padding:6px;border:1.5px solid #d1d5db;border-radius:5px;font-size:.82rem">
+                    <option value="">—</option>
+                    <option {% if t.vt_cap=='Pass' %}selected{% endif %}>Pass</option>
+                    <option {% if t.vt_cap=='Fail' %}selected{% endif %}>Fail</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:.75rem;font-weight:700;color:#444;display:block;margin-bottom:3px">Lab Result</label>
+                  <select name="lab_result" style="width:100%;padding:6px;border:1.5px solid #d1d5db;border-radius:5px;font-size:.82rem">
+                    <option value="">—</option>
+                    <option {% if t.lab_result=='Pass' %}selected{% endif %}>Pass</option>
+                    <option {% if t.lab_result=='Fail' %}selected{% endif %}>Fail</option>
+                    <option {% if t.lab_result=='Pending' %}selected{% endif %}>Pending</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size:.75rem;font-weight:700;color:#444;display:block;margin-bottom:3px">Final Result</label>
+                  <select name="final_result" style="width:100%;padding:6px;border:1.5px solid #d1d5db;border-radius:5px;font-size:.82rem">
+                    <option value="">—</option>
+                    <option {% if t.final_result=='Pass' %}selected{% endif %}>Pass</option>
+                    <option {% if t.final_result=='Fail' %}selected{% endif %}>Fail</option>
+                    <option {% if t.final_result=='Pending' %}selected{% endif %}>Pending</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <select name="test_status" style="padding:6px;border:1.5px solid #d1d5db;border-radius:5px;font-size:.82rem">
+                  <option value="in_progress">In Progress</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+              </div>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p style="color:#aaa;font-size:.85rem;text-align:center;padding:12px 0">No test assignments for this session.</p>
+  {% endif %}
+</div>
+{% else %}
+<div class="card" style="text-align:center;color:#aaa;padding:40px">No active sessions.</div>
+{% endfor %}
+
+<script>
+function toggleResult(id){
+  var el=document.getElementById(id);
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+</script>
+{% endblock %}

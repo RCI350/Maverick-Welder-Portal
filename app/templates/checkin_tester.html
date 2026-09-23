@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tester Check-In — Maverick</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .card{background:#fff;border-radius:16px;padding:40px 36px;max-width:440px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+  h2{font-size:1.3rem;font-weight:800;color:#1a1a2e;margin-bottom:6px}
+  p{color:#777;font-size:.9rem;margin-bottom:24px}
+  .flash{background:#fde8ec;color:#9b1c2e;border-left:4px solid #c8102e;padding:10px 14px;border-radius:6px;margin-bottom:16px;font-size:.875rem}
+  label{display:block;font-size:.82rem;font-weight:700;color:#444;margin-bottom:5px}
+  input{width:100%;padding:12px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:1rem;transition:border-color .15s}
+  input:focus{outline:none;border-color:#c8102e;box-shadow:0 0 0 3px rgba(200,16,46,.1)}
+  .btn{display:block;width:100%;padding:13px;background:#c8102e;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:20px;transition:background .15s}
+  .btn:hover{background:#a50d26}
+  .back{text-align:center;margin-top:18px;font-size:.82rem;color:#aaa}
+  .back a{color:#c8102e}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>Tester Check-In</h2>
+  <p>Enter your Picture ID number to begin.</p>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}<div class="flash">{{ messages[0] }}</div>{% endif %}
+  {% endwith %}
+  <form method="post">
+    <label for="picture_id">Picture ID Number</label>
+    <input id="picture_id" name="picture_id" type="text" placeholder="e.g. 1234" autocomplete="off" autofocus required/>
+    <button class="btn" type="submit">Continue</button>
+  </form>
+  <div class="back"><a href="/">&#8592; Back to check-in menu</a></div>
+</div>
+</body>
+</html>

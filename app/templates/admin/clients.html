@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Clients — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Clients</h1>
+  <div class="actions"><a href="/admin/clients/new" class="btn btn-primary">+ Add Client</a></div>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in clients %}
+        <tr>
+          <td><strong>{{ c.name }}</strong></td>
+          <td>{{ c.contact_name or '—' }}</td>
+          <td>{{ c.contact_email or '—' }}</td>
+          <td>{{ c.contact_phone or '—' }}</td>
+          <td>{% if c.active %}<span class="badge badge-green">Active</span>{% else %}<span class="badge badge-gray">Inactive</span>{% endif %}</td>
+          <td><a href="/admin/clients/{{ c.id }}/edit" class="btn btn-sm btn-outline">Edit</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="text-align:center;color:#aaa;padding:32px">No clients found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

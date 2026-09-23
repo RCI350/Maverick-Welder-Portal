@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Muster — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Muster Chart</h1>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+  {% for zone in zones %}
+  <div class="card">
+    <div class="card-title">{{ zone.name }}</div>
+    {% set persons = data.get(zone.name, []) %}
+    {% if persons %}
+    <ul style="list-style:none;padding:0">
+      {% for p in persons %}
+      <li style="padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:.875rem">
+        {{ p.first_name }} {{ p.last_name }}
+        <form method="post" action="/muster/assign" style="display:inline;margin-left:8px">
+          <input type="hidden" name="session_id" value="{{ p.session_id }}"/>
+          <input type="hidden" name="zone_id" value=""/>
+          <button type="submit" class="btn btn-sm btn-danger" style="padding:2px 8px;font-size:.72rem">Remove</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p style="color:#aaa;font-size:.85rem;padding:8px 0">No welders assigned.</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card" style="margin-top:20px">
+  <div class="card-title">Assign Welder to Zone</div>
+  <form method="post" action="/muster/assign" style="display:flex;gap:12px;flex-wrap:wrap">
+    <select name="session_id" style="flex:1;min-width:200px;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:6px">
+      <option value="">Select session...</option>
+      {% for zone in zones %}
+        {% for p in data.get(zone.name, []) %}
+        <option value="{{ p.session_id }}">{{ p.first_name }} {{ p.last_name }} ({{ zone.name }})</option>
+        {% endfor %}
+      {% endfor %}
+    </select>
+    <select name="zone_id" style="flex:1;min-width:160px;padding:9px 12px;border:1.5px solid #d1d5db;border-radius:6px">
+      <option value="">Select zone...</option>
+      {% for zone in zones %}
+      <option value="{{ zone.id }}">{{ zone.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Assign</button>
+  </form>
+</div>
+{% endblock %}

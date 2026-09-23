@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}WPS Catalog — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>WPS Catalog</h1>
+  <div class="actions">
+    <a href="/admin/wps/new" class="btn btn-primary">+ Add WPS</a>
+    <a href="/admin/coupons" class="btn btn-secondary">Coupon Parts</a>
+    <a href="/admin/clients" class="btn btn-outline">Clients</a>
+    <a href="/admin/users" class="btn btn-outline">Users</a>
+  </div>
+</div>
+
+<form method="get" style="margin-bottom:18px;display:flex;gap:10px">
+  <input name="q" type="text" value="{{ q }}" placeholder="Search WPS #, name..." style="max-width:300px"/>
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if q %}<a href="/admin/wps" class="btn btn-outline">Clear</a>{% endif %}
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>WPS #</th>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Process</th>
+          <th>Position</th>
+          <th>Pipe/Plate</th>
+          <th>Size</th>
+          <th>Client</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in wps_list %}
+        <tr>
+          <td><strong>{{ w.wps_number }}</strong></td>
+          <td>{{ w.name or '—' }}</td>
+          <td><span class="badge badge-blue">{{ w.type }}</span></td>
+          <td>{{ w.process or '—' }}</td>
+          <td>{{ w.position or '—' }}</td>
+          <td>{{ w.pipe_plate or '—' }}</td>
+          <td>{{ w.size or '—' }}</td>
+          <td>{{ w.client_name or '—' }}</td>
+          <td><a href="/admin/wps/{{ w.id }}/edit" class="btn btn-sm btn-outline">Edit</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" style="text-align:center;color:#aaa;padding:32px">No WPS records found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

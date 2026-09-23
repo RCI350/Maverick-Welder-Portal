@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if user else 'New' }} User — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ 'Edit' if user else 'New' }} User</h1>
+  <div class="actions"><a href="/admin/users" class="btn btn-outline">Cancel</a></div>
+</div>
+<div class="card" style="max-width:520px">
+  <form method="post">
+    <div class="form-group">
+      <label for="name">Full Name *</label>
+      <input id="name" name="name" type="text" value="{{ user.name if user else '' }}" required/>
+    </div>
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input id="email" name="email" type="email" value="{{ user.email if user else '' }}" required/>
+    </div>
+    <div class="form-group">
+      <label for="password">Password {% if user %}(leave blank to keep current){% endif %}</label>
+      <input id="password" name="password" type="password" {% if not user %}required{% endif %}/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="staff" {% if user and user.role=='staff' %}selected{% endif %}>Staff</option>
+          <option value="admin" {% if user and user.role=='admin' %}selected{% endif %}>Admin</option>
+          <option value="partner" {% if user and user.role=='partner' %}selected{% endif %}>Partner</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="client_id">Client (for Partner logins)</label>
+        <select id="client_id" name="client_id">
+          <option value="">None</option>
+          {% for c in clients %}
+          <option value="{{ c.id }}" {% if user and user.client_id==c.id %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    {% if user %}
+    <div class="form-group">
+      <label for="active">Status</label>
+      <select id="active" name="active">
+        <option value="true" {% if user.active %}selected{% endif %}>Active</option>
+        <option value="false" {% if not user.active %}selected{% endif %}>Inactive</option>
+      </select>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">{{ 'Save Changes' if user else 'Create User' }}</button>
+  </form>
+</div>
+{% endblock %}

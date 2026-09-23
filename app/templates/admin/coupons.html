@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Coupon Parts — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Coupon Parts (CPN)</h1>
+  <div class="actions">
+    <a href="/admin/coupons/new" class="btn btn-primary">+ Add CPN</a>
+    <a href="/admin/wps" class="btn btn-outline">Back to WPS</a>
+  </div>
+</div>
+
+<form method="get" style="margin-bottom:18px;display:flex;gap:10px">
+  <input name="q" type="text" value="{{ q }}" placeholder="Search CPN # or description..." style="max-width:300px"/>
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if q %}<a href="/admin/coupons" class="btn btn-outline">Clear</a>{% endif %}
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>CPN #</th>
+          <th>Description</th>
+          <th>Material Type</th>
+          <th>Size</th>
+          <th>Thickness</th>
+          <th>WPS #</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in coupons %}
+        <tr>
+          <td><strong>{{ c.cpn_number }}</strong></td>
+          <td>{{ c.description or '—' }}</td>
+          <td>{{ c.material_type or '—' }}</td>
+          <td>{{ c.size or '—' }}</td>
+          <td>{{ c.thickness or '—' }}</td>
+          <td>{{ c.wps_number or '—' }}</td>
+          <td><a href="/admin/coupons/{{ c.id }}/edit" class="btn btn-sm btn-outline">Edit</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;color:#aaa;padding:32px">No coupon parts found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

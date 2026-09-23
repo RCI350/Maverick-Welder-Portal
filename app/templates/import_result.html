@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Import Results — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Import Results</h1>
+  <div class="actions">
+    <a href="/import" class="btn btn-outline">Import More</a>
+    <a href="/dashboard/shop" class="btn btn-primary">Go to Shop Dashboard</a>
+  </div>
+</div>
+
+{% if results %}
+<div class="card" style="margin-bottom:16px">
+  <div class="card-title" style="color:#065f46">&#10003; Imported ({{ results|length }})</div>
+  {% for r in results %}
+  <div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.875rem;color:#1a1a2e">{{ r }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if errors %}
+<div class="card">
+  <div class="card-title" style="color:#991b1b">&#9888; Errors ({{ errors|length }})</div>
+  {% for e in errors %}
+  <div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.875rem;color:#991b1b">{{ e }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if not results and not errors %}
+<div class="card" style="text-align:center;color:#aaa;padding:32px">No files were processed.</div>
+{% endif %}
+{% endblock %}

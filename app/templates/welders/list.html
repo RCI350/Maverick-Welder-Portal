@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Welders — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>Welders</h1>
+  <div class="actions"><a href="/welders/new" class="btn btn-primary">+ Add Welder</a></div>
+</div>
+
+<form method="get" style="margin-bottom:18px;display:flex;gap:10px">
+  <input name="q" type="text" value="{{ q }}" placeholder="Search by name or Picture ID..." style="max-width:320px"/>
+  <button type="submit" class="btn btn-secondary">Search</button>
+  {% if q %}<a href="/welders" class="btn btn-outline">Clear</a>{% endif %}
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Picture ID</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in welders %}
+        <tr>
+          <td><strong>{{ w.last_name }}, {{ w.first_name }}</strong></td>
+          <td>{{ w.picture_id or '—' }}</td>
+          <td>{{ w.email or '—' }}</td>
+          <td>{{ w.mobile or '—' }}</td>
+          <td>
+            <a href="/welders/{{ w.id }}/edit" class="btn btn-sm btn-outline">Edit</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#aaa;padding:32px">No welders found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

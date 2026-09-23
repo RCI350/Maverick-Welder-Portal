@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Safety Briefing — Maverick</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{background:#fff;border-radius:16px;padding:40px 36px;max-width:680px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+  h2{font-size:1.3rem;font-weight:800;color:#1a1a2e;margin-bottom:6px}
+  .subtitle{color:#c8102e;font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:20px}
+  .pdf-area{background:#f7f8fa;border:2px solid #e5e7eb;border-radius:10px;min-height:420px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;overflow:hidden}
+  .pdf-area iframe{width:100%;height:420px;border:none}
+  .pdf-area .no-pdf{color:#aaa;font-size:.9rem;text-align:center;padding:20px}
+  .btn{display:block;width:100%;padding:14px;background:#c8102e;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;transition:background .15s;text-align:center;text-decoration:none}
+  .btn:hover{background:#a50d26;text-decoration:none}
+  .agree-wrap{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;padding:14px;background:#fdf5f6;border-radius:8px;border-left:4px solid #c8102e}
+  .agree-wrap input{margin-top:3px;width:18px;height:18px;accent-color:#c8102e;flex-shrink:0}
+  .agree-wrap label{font-size:.875rem;color:#333;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>Safety Briefing</h2>
+  <div class="subtitle">Please review the safety briefing before entering the facility</div>
+
+  <div class="pdf-area">
+    {% if safety_pdf_url %}
+      <iframe src="{{ safety_pdf_url }}" title="Safety Briefing"></iframe>
+    {% else %}
+      <div class="no-pdf">
+        <p style="font-size:2rem;margin-bottom:8px">&#128196;</p>
+        <p>Safety briefing document will appear here.</p>
+        <p style="font-size:.78rem;margin-top:8px;color:#bbb">Contact an administrator to upload the PDF.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="agree-wrap">
+    <input type="checkbox" id="agree-chk" onchange="document.getElementById('proceed-btn').disabled=!this.checked"/>
+    <label for="agree-chk">I have read and understood the safety briefing and agree to follow all safety rules while on the Maverick premises.</label>
+  </div>
+
+  <a id="proceed-btn" href="/checkin/confirmed/{{ next_step }}" class="btn" onclick="return document.getElementById('agree-chk').checked || (alert('Please agree to the safety briefing first.'), false)"
+     style="pointer-events:auto;opacity:1">
+    I Agree &mdash; Check In
+  </a>
+</div>
+</body>
+</html>

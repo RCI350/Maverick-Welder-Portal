@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if client else 'New' }} Client — Maverick Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>{{ 'Edit' if client else 'New' }} Client</h1>
+  <div class="actions"><a href="/admin/clients" class="btn btn-outline">Cancel</a></div>
+</div>
+<div class="card" style="max-width:520px">
+  <form method="post">
+    <div class="form-group">
+      <label for="name">Client Name *</label>
+      <input id="name" name="name" type="text" value="{{ client.name if client else '' }}" required/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="contact_name">Contact Name</label>
+        <input id="contact_name" name="contact_name" type="text" value="{{ client.contact_name if client else '' }}"/>
+      </div>
+      <div class="form-group">
+        <label for="contact_email">Contact Email</label>
+        <input id="contact_email" name="contact_email" type="email" value="{{ client.contact_email if client else '' }}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="contact_phone">Contact Phone</label>
+      <input id="contact_phone" name="contact_phone" type="text" value="{{ client.contact_phone if client else '' }}"/>
+    </div>
+    {% if client %}
+    <div class="form-group">
+      <label for="active">Status</label>
+      <select id="active" name="active">
+        <option value="true" {% if client.active %}selected{% endif %}>Active</option>
+        <option value="false" {% if not client.active %}selected{% endif %}>Inactive</option>
+      </select>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary">{{ 'Save Changes' if client else 'Add Client' }}</button>
+  </form>
+</div>
+{% endblock %}

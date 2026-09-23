@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}New Test Session — Maverick{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>New Test Session</h1>
+  <div class="actions"><a href="/dashboard/shop" class="btn btn-outline">Cancel</a></div>
+</div>
+
+<div class="card">
+  <form method="post">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="lab_number">Lab # *</label>
+        <input id="lab_number" name="lab_number" type="text" required autofocus/>
+      </div>
+      <div class="form-group">
+        <label for="session_number">Session / Reference #</label>
+        <input id="session_number" name="session_number" type="text"/>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="welder_id">Welder *</label>
+        <select id="welder_id" name="welder_id" required>
+          <option value="">Select welder...</option>
+          {% for w in welders %}
+          <option value="{{ w.id }}">{{ w.last_name }}, {{ w.first_name }}{% if w.picture_id %} ({{ w.picture_id }}){% endif %}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="client_id">Client / Contractor</label>
+        <select id="client_id" name="client_id">
+          <option value="">Select client...</option>
+          {% for c in clients %}
+          <option value="{{ c.id }}">{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="type">Test Type</label>
+        <select id="type" name="type">
+          <option value="WQ">WQ — Welder Qualification</option>
+          <option value="WPQ">WPQ — Welder Performance Qualification</option>
+          <option value="PQ">PQ — Procedure Qualification</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="po_number">PO Number</label>
+        <input id="po_number" name="po_number" type="text"/>
+      </div>
+      <div class="form-group">
+        <label for="job_number">Job Number</label>
+        <input id="job_number" name="job_number" type="text"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>WPS Assignments</label>
+      <div style="max-height:320px;overflow-y:auto;border:1.5px solid #d1d5db;border-radius:8px;padding:12px;background:#fafafa">
+        {% for w in wps_list %}
+        <label style="display:flex;align-items:center;gap:10px;padding:7px 6px;border-bottom:1px solid #f0f0f0;cursor:pointer;font-weight:normal">
+          <input type="checkbox" name="wps_ids" value="{{ w.id }}" style="width:16px;height:16px;accent-color:#c8102e"/>
+          <span>
+            <strong>{{ w.wps_number }}</strong> — {{ w.name or 'Unnamed' }}
+            <span style="font-size:.75rem;color:#888;margin-left:6px">{{ w.process }} {{ w.position }} {{ w.pipe_plate }}</span>
+          </span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;margin-top:24px">
+      <button type="submit" class="btn btn-primary">Create Session &amp; Check In</button>
+      <a href="/welders/new" class="btn btn-outline btn-sm" target="_blank" style="align-self:center">+ New Welder</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

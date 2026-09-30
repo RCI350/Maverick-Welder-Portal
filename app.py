@@ -8,7 +8,7 @@ from flask import (Flask, render_template, request, redirect, url_for,
                    session, flash, g, jsonify, Response)
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from config import DATABASE_URL, SECRET_KEY, RESEND_API_KEY, WEBHOOK_URL, WEBHOOK_SECRET
+from config import DATABASE_URL, SECRET_KEY, RESEND_API_KEY, WEBHOOK_URL, WEBHOOK_SECRET, SAFETY_PDF_URL
 
 app = Flask(__name__, template_folder='app/templates', static_folder='app/static')
 app.secret_key = SECRET_KEY
@@ -217,7 +217,8 @@ def checkin_visitor():
 @app.route('/safety-briefing')
 def safety_briefing():
     next_step = request.args.get('next', 'home')
-    return render_template('safety_briefing.html', next_step=next_step)
+    return render_template('safety_briefing.html', next_step=next_step,
+                           safety_pdf_url=SAFETY_PDF_URL or None)
 
 @app.route('/checkin/confirmed/<kind>')
 def checkin_confirmed(kind):

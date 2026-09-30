@@ -7,3 +7,4 @@ SECRET_KEY     = os.environ['SECRET_KEY']
 RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
 WEBHOOK_URL    = os.environ.get('WEBHOOK_URL', '')
 WEBHOOK_SECRET = os.environ.get('WEBHOOK_SECRET', '')
+SAFETY_PDF_URL = os.environ.get('SAFETY_PDF_URL', '')
